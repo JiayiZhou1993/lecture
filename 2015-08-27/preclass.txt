@@ -8,13 +8,27 @@
     you should use a script to produce this plot, with both the serial
     fraction and the maximum number of cores as parameters.
 
+    According to Amdahl's law, Speedup=Tserial/Tparallel=1/(alpha+(1-alpha)/p)
+    As alpha=0.1 here, Speedup=p/(0.1p+0.9), and Efficiency=Speedup/p=1/(0.1p+0.9).
+    I will upload a matlab file later to plot it.
+
 2.  Suppose a particular program can be partitioned into perfectly
     independent tasks, each of which takes time tau.  Tasks are
     set up, scheduled, and communicated to p workers at a (serial)
     central server; this takes an overhead time alpha per task.
     What is the theoretically achievable throughput (tasks/time)?
 
+    Parallel time=tau    Overhead time=alpha/task
+    Assume we have p workers for p tasks, the overall time will be
+    time=tau+alpha*p
+    throughput=p/time=p/(alpha*p+tau)
+    As p grows to infinite, theoretically achievable throughput is
+    1/alpha	
+
 3.  Under what circumstances is it best to not tune?
+    (1) If human time is more expensive than time saved
+    (2) Make a mess of the code base
+    (3) If it already takes little time.
 
 4.  The class cluster consists of eight nodes and fifteen Xeon Phi
     accelerator boards.  Based on an online search for information on
@@ -24,4 +38,23 @@
     in your calculation.  (We will return to this question again after
     we cover some computer architecture.)
     
+    How to compute flop rate:
+    http://www.novatte.com/our-blog/197-how-to-calculate-peak-theoretical-performance-of-a-cpu-based-hpc-system    
+    According to the page above, Intel E5-2600v3 series CPUs have 16 instructions per cycle(due to AVX2.0)
+    http://ark.intel.com/products/83352/Intel-Xeon-Processor-E5-2620-v3-15M-Cache-2_40-GHz    
+    It tells us that E5 2620 v3 is 2.4GHz. And we have 8 nodes and 12 cores per node
+    so flop rate=2.4G*8*12*16=3686.4 GFLOPS
+
+    For accelerator boards, 
+    http://ark.intel.com/products/71992/Intel-Xeon-Phi-Coprocessor-5110P-8GB-1_053-GHz-60-core?q=Xeon%20phi%205110p
+    It's 1.053GHz, and as it is neither AVX2.0 nor AVX, so it has 4 instructions per cycle
+    And we have 15 boards and 60 cores for each
+    flop rate=1.053G*15*60*4=3790.8 GFLOPS
+
+    So overall it's 7.4772 TFLOPS
+
 5.  What is the approximate theoretical peak flop rate for your own machine?
+    My laptop is MSI gs60. According to my device manager, my laptop has 8-core Intel i7-5700HQ @ 2.70GHz
+    http://ark.intel.com/products/87716/Intel-Core-i7-5700HQ-Processor-6M-Cache-up-to-3_50-GHz?q=i7%205700HQ
+    It is also AVX2.0,so I guess it has 16 instructions per cycle.
+    flop rate=2.7G*8*16=345.6 GFLOPS
