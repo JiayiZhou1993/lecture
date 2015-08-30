@@ -18,6 +18,19 @@ In practice, this took X time.  This includes
 Consider the following questions:
 
 1. What is a simple model that would predict this time?
-2. What about a simple model to predict time for one person to count?
-3. How big should the class be before the parallel method takes less time?
+X1=Ts+Tcount*Nperson+Tgather*Nrow+Tarithmetic
+Ts is the time to start the process which is constant
+Tcount is the time for a person to count, assume it is constant
+Tperson is the number of people in the row, assume each row have the same number or we just take the largest number, then it could be constant
+Tgather is the time for the instructor to receive the counts from one row
+Nrow is the number of the rows
+Tarithmetic is the time to do the arithmetic which is constant if Bindel is powerful. :)
 
+2. What about a simple model to predict time for one person to count?
+X2=Tcount*Nperson*Nrow+Ts
+
+3. How big should the class be before the parallel method takes less time?
+solve X1<X2
+Nrow>(Tcount*Nperson+Tarithmetic)/(Tcount*Nperson-Tgather)  
+So with more rows (workers), parallel compute will be more efficient
+However, if Tgather>Tcount*Nperson, it will change.
