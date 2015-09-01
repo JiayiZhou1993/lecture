@@ -12,11 +12,41 @@ with questions for class!
     in your calculation.  (We will return to this question again after
     we cover some computer architecture.)
     
+    How to compute flop rate:
+    http://www.novatte.com/our-blog/197-how-to-calculate-peak-theoretical-performance-of-a-cpu-based-hpc-system    
+    According to the page above, Intel E5-2600v3 series CPUs have 16 instructions per cycle(due to AVX2.0)
+    http://ark.intel.com/products/83352/Intel-Xeon-Processor-E5-2620-v3-15M-Cache-2_40-GHz    
+    It tells us that E5 2620 v3 is 2.4GHz. And we have 8 nodes and 12 cores per node
+    so flop rate=2.4G*8*12*16=3686.4 GFLOPS
+
+    For accelerator boards, 
+    http://ark.intel.com/products/71992/Intel-Xeon-Phi-Coprocessor-5110P-8GB-1_053-GHz-60-core?q=Xeon%20phi%205110p
+    It's 1.053GHz, and as it is neither AVX2.0 nor AVX, so it has 4 instructions per cycle
+    And we have 15 boards and 60 cores for each
+    flop rate=1.053G*15*60*4=3790.8 GFLOPS
+
+    So overall it's 7.4772 TFLOPS
+
 2.  What is the approximate theoretical peak flop rate for your own machine?
+
+    My laptop is MSI gs60. According to my device manager, my laptop has 8-core Intel i7-5700HQ @ 2.70GHz
+    http://ark.intel.com/products/87716/Intel-Core-i7-5700HQ-Processor-6M-Cache-up-to-3_50-GHz?q=i7%205700HQ
+    It is also AVX2.0,so I guess it has 16 instructions per cycle.
+    flop rate=2.7G*8*16=345.6 GFLOPS
 
 3.  Suppose there are t tasks that can be executed in a pipeline
     with p stages.  What is the speedup over serial execution of the
     same tasks?
+	
+    Assume one stage will take time t0,
+    overall time for serial execution will be t0*p*t.
+    
+    For pipelined, the overall time will be t0*(p-1)+t0*t
+    As we add one task,the time will only increase by t0.
+   
+    So the speedup will be t0*p*t/(t0*(p-1)+t0*t)=p*t/(t+p-1)
+    So potential speedup = p
+
 
 4.  Consider the following list of tasks (assume they can't be pipelined):
 
@@ -31,6 +61,9 @@ with questions for class!
     a compiled application?  What is the minimum parallel time given
     an arbitrary number of processors?
 
+    Serial:2.75hr
+    Parallel:2.25hr
+
 5.  Clone the membench repository from GitHub:
 
        git clone git@github.com:cornell-cs5220-f15/membench.git
@@ -42,6 +75,10 @@ with questions for class!
     in the leading comments of the Makefile).  Look at the output file
     timings-heat.pdf; what can you tell about the cache architecture
     on your machine from the plot?
+
+    Trouble in importing pandas. When I pip install pandas, it tells me that it has been installed
+    But when I enter python and then import pandas, it fails. Really weird.
+    Besides, I use cygwin and anaconda.
 
 6.  From the cloned repository, check out the totient branch:
 
