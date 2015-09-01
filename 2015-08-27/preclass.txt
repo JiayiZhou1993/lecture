@@ -47,11 +47,11 @@
 
     For accelerator boards, 
     http://ark.intel.com/products/71992/Intel-Xeon-Phi-Coprocessor-5110P-8GB-1_053-GHz-60-core?q=Xeon%20phi%205110p
-    It's 1.053GHz, and as it is neither AVX2.0 nor AVX, so it has 4 instructions per cycle
+    http://software.intel.com/en-us/articles/intel-xeon-phi-core-micro-architecture
     And we have 15 boards and 60 cores for each
-    flop rate=1.053G*15*60*4=3790.8 GFLOPS
+    flop rate=1.053G*15*60*8*2=15163.0 GFLOPS
 
-    So overall it's 7.4772 TFLOPS
+    So overall it's 18.894 TFLOPS
 
 5.  What is the approximate theoretical peak flop rate for your own machine?
     My laptop is MSI gs60. According to my device manager, my laptop has 8-core Intel i7-5700HQ @ 2.70GHz
